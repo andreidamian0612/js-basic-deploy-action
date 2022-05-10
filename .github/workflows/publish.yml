@@ -19,5 +19,4 @@ jobs:
     - name: Build the hello-world Docker image
       run: |
         docker build . --tag ghcr.io/devsecops-ls/js-container:latest
-        docker run ghcr.io/devsecops-ls/js-container:latest
         docker push ghcr.io/devsecops-ls/js-container:latest
