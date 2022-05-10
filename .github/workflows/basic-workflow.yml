@@ -1,18 +1,23 @@
-name: Basic Build Action
+name: publish
+
 on: [push]
 
 jobs:
-  build:
+  publish-hello-world-image:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v1
-    - name: npm install
+    - uses: actions/checkout@v2
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build the hello-world Docker image
       run: |
-        npm install
-    - name: build docker image
-      run: docker build -t basic-node-app .
-    - name: push to package registry
-      uses: mattdavis0351/actions/docker-gpr@v1
-      with: 
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        image-name: basic-node-app
+        docker build . --tag ghcr.io/jonashackt/hello-world:latest
+        docker run ghcr.io/jonashackt/hello-world:latest
+        docker push ghcr.io/jonashackt/hello-world:latest
