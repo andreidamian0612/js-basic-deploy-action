@@ -1,20 +1,6 @@
-# pull official base image
-FROM node:13.12.0-alpine
-
-# set working directory
+FROM python:3.8-alpine
+RUN mkdir /app
+ADD . /app
 WORKDIR /app
-
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
-
-# install app dependencies
-COPY my-app/package.json ./
-COPY my-app/package-lock.json ./
-RUN npm install --silent
-RUN npm install react-scripts@3.4.1 -g --silent
-
-# add app
-COPY . ./
-
-# start app
-CMD ["npm", "start"]
+RUN pip install -r requirements.txt
+CMD ["python", "app.py"]
